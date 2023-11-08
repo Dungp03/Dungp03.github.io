@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WRTC</title>
+    <link rel="stylesheet" href="./view.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script src="main.js"></script>
+
+    
+</head>
+<body>
+    <div id="div-chat">
+        <div class="user">
+            <p>Online User:</p>
+            <ul id="ulUser">
+                
+            </ul>
+            <h3 id="mydiv">Your ID: </h3>
+        </div>
+        
+        <div class="video"> 
+            <div id="localStreamContainer">
+                 <video id="localStream" width="300"></video>
+                 <div id="controls">
+                    <div class="controls-container" id="cameraBtn">
+                        <img src="/WRTC-master/images/camera-solid-24.png" alt="">
+                    </div>
+                    <div class="controls-container" id="micBtn">
+                        <img src="/WRTC-master/images/microphone-solid-24.png" alt="">
+                    </div>
+                 </div>
+                 
+            </div>
+       
+        <div id="remoteStreamContainer">
+            <video id="remoteStream"></video>
+        </div>
+        </div>
+        <div class="addUser">
+          <input type="text" id="remoteID" placeholder="Remote ID">
+            <button id="btnCall">Call</button>  
+        </div>
+        
+        <div class="quiz-menu">
+            <div class="select-btn">
+                <span class="sBtn-text">Select your option</span>
+                <i class="bx bx-chevron-down"></i>
+            </div>
+            <ul class="options">
+                <li class="option">
+                    <i class="bx bxl-github" style="color: #171515;"></i>
+                    <span class="option-text">Github</span>
+                </li>
+                <li class="option">
+                    <i class="bx bxl-instagram-alt" style="color: #E1306C;"></i>
+                    <span class="option-text">Instagram</span>
+                </li>
+                <li class="option">
+                    <i class="bx bxl-linkedin-square" style="color: #0E76A8;"></i>
+                    <span class="option-text">Linkedin</span>
+                </li>
+                <li class="option">
+                    <i class="bx bxl-facebook-circle" style="color: #4267B2;"></i>
+                    <span class="option-text">Facebook</span>
+                </li>
+                <li class="option">
+                    <i class="bx bxl-twitter" style="color: #1DA1F2;"></i>
+                    <span class="option-text">Twitter</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="div-dang-ky">
+        <input type="text" id="txtUsername" placeholder="Enter your username">
+        <button id="btnSignUp">Sign Up</button>
+    </div>
+
+    <script>
+        const socket = io('http://localhost:3001');
+
+        socket.on('connection');
+    </script>
+</body>
+</html>
+
