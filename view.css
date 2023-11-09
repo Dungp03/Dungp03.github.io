@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Kenia&family=Poppins:wght@200;300;400;500;600;700;900&family=Roboto:ital,wght@0,300;0,400;0,500;0,900;1,700;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#div-chat{
+    display: flex;
+    flex-direction: column;  
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100vh;
+    padding: 20px;
+}
+
+.user{
+    text-align: center;
+    justify-content: center;
+    padding-left:43rem;
+}
+.user #ulUser{
+    list-style: none;
+}
+
+.video{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+}
+ .video #localStream{
+    position: absolute;
+    top: 5rem;
+    left: 20px;
+    width: 20%;
+
+}
+
+.video #remoteStream{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    
+}
+
+#controls{
+    position: fixed;
+    display: flex;
+    padding: 20px;
+    gap:20px;
+    bottom: 90px;
+    left: 49.5%;
+    transform: translateX(-50%);
+   
+}
+.controls-container{
+    background-color:red;
+    border-radius: 50%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.controls-container:hover{
+    background-color: crimson;
+}
+.controls-container img{
+    height: 30px;
+    width: 30px;
+    color: black;
+}
+
+.addUser{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 50rem;
+    gap: 2rem;
+    bottom: 2rem;
+
+}
+#remoteID{
+    text-align: center;
+    width: 200px;
+}
+
+#btnCall{
+    width:100px;
+    color: red;
+}
+
+/*quiz*/
+.quiz-menu{
+    position: absolute;
+    width: 380px;
+    margin: 140px auto;
+    bottom:20rem;
+}
+.quiz-menu .select-btn{
+    display: flex;
+    height: 55px;
+    background: #fff;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 8px;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-between;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+.sBtn-text{
+    color: black;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-left: 6rem;
+    font-weight: 600;
+}
+.select-btn i{
+    font-size: 25px;
+    transition: 0.3s;
+}
+.select-btn .bx-chevron-down{
+    position: absolute;
+    color: red;
+}
+.quiz-menu.active .select-btn i{
+    transform: rotate(-180deg);
+}
+.quiz-menu .options{
+    position: absolute;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    display: none;
+    width: 380px;
+}
+.quiz-menu.active .options{
+    display: block;
+}
+.options .option{
+    display: flex;
+    height: 55px;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 8px;
+    align-items: center;
+    background: #fff;
+    padding-left: 6rem;
+}
+.options .option:hover{
+    background: #F2F2F2;
+}
+.option i{
+    font-size: 25px;
+    margin-right: 12px;
+}
+.option .option-text{
+    font-size: 18px;
+    color: #333;
+}
