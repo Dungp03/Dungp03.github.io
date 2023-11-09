@@ -2,7 +2,6 @@
 let localStream;
 let remoteStream;
 // var peer = null;
-const peer = new Peer();
 let isCameraOn = true;
 const socket = io('https://wrtc-demo-72673597876c.herokuapp.com');
 
@@ -11,10 +10,11 @@ $(document).ready(function() {
     // Create a new Peer instance
 
     try {
-        peer = new Peer(null, {
-            host: "localhost",
-            port: 9090,
-            path: "/peerserver",
+        peer = new Peer(peerjs, {
+            secure: true,
+            host: "wrtc-demo-72673597876c.herokuapp.com",
+            port: 443,
+            // path: "/peerserver",
         });
     } catch (error) {
         console.error('Error initializing Peer:', error);
@@ -75,49 +75,38 @@ $(document).ready(function() {
     
 
     // Bật/tắt camera
-    function toggleCamera(){
+    function toggleCamera() {
         isCameraOn = !isCameraOn;
         localStream.getVideoTracks()[0].enabled = isCameraOn;
-        const cameraIcon = document.querySelector('#cameraBtn img');
-        if (isCameraOn) {
-            cameraIcon.src = "WRTC-master/images/camera-solid-24.png";
-        } else {
-            cameraIcon.src = "WRTC-master/images/camera-off-solid-24.png";
-        }
-        dataChannel.send(JSON.stringify({ type: 'cameraToggle', isCameraOn: isCameraOn }));
-    };
-
-    // function toggleRemoteCamera() {
-    //     remoteStream.getVideoTracks()[0].enabled = isRemoteCameraOn;
-    // }
-
-    $('#cameraBtn').click(toggleCamera)
     
-    // Bật/tắt mic
-    let isMicOn = true;
-    $('#micBtn').click(() => {
+        // Gửi tín hiệu cho đối phương qua Data Channel
+        dataChannel.send(JSON.stringify({ type: 'cameraToggle', isCameraOn: isCameraOn }));
+    }
+
+    function toggleMicrophone() {
         isMicOn = !isMicOn;
         localStream.getAudioTracks()[0].enabled = isMicOn;
-        const micIcon = document.querySelector('#micBtn img');
-        if (isMicOn) {
-            micIcon.src = "WRTC-master/images/microphone-solid-24.png"
-        } else {
-            micIcon.src = "WRTC-master/images/microphone-off-solid-24.png"
-        }
-    });
-
     
+        // Gửi tín hiệu cho đối phương qua Data Channel
+        dataChannel.send(JSON.stringify({ type: 'microphoneToggle', isMicOn: isMicOn }));
+    }
+
+    $('#cameraBtn').click(toggleCamera);
+    $('#micBtn').click(toggleMicrophone);
 
     // Xử lý sự kiện Data Channel
     peer.on('data', data => {
         const message = JSON.parse(data);
     
-        // Kiểm tra nếu là yêu cầu bật/tắt camera
         if (message.type === 'cameraToggle') {
             const { isCameraOn } = message;
             toggleRemoteCamera(isCameraOn);
+        } else if (message.type === 'microphoneToggle') {
+            const { isMicOn } = message;
+            toggleRemoteMicrophone(isMicOn);
         }
     });
+    
 
     //quiz
     const optionMenu = document.querySelector(".quiz-menu"),
