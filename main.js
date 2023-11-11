@@ -3,6 +3,7 @@ let localStream;
 let remoteStream;
 // var peer = null;
 let isCameraOn = true;
+let isMicOn = true;
 const socket = io('https://wrtc-demo-72673597876c.herokuapp.com');
 
 // Đảm bảo rằng đoạn mã javacript đã được thực thi khi DOM đc hoành thành
