@@ -4,35 +4,35 @@ let remoteStream;
 // var peer = null;
 let isCameraOn = true;
 let isMicOn = true;
-const socket = io(process.env.SERVER_URL);
+const socket = io();
 
 // Đảm bảo rằng đoạn mã javacript đã được thực thi khi DOM đc hoành thành
-$(document).ready(function() {
+$(document).ready(function () {
     // Create a new Peer instance
 
     try {
         peer = new Peer(peerjs, {
-            secure: process.env.PEERJS_SECURE === 'true',
-            host: process.env.PEERJS_HOST,
-            port: parseInt(process.env.PEERJS_PORT),
-            path: process.env.PEERJS_PATH,
+            host: process.env.PEER_HOST || window.location.hostname,
+            port: process.env.PEER_PORT,
+            path: process.env.PEER_PATH,
+            secure: process.env.PEER_SECURE === 'true'
         });
     } catch (error) {
         console.error('Error initializing Peer:', error);
     }
 
-    peer.on('open', function(id) {
+    peer.on('open', function (id) {
         // Display the peer ID in the 'mydiv' element
         $("#mydiv").text("Your ID: " + id);
         console.log("Your ID: " + id);
 
         $('#btnSignUp').click(() => {
             const username = $('#txtUsername').val();
-            socket.emit('NGUOI_DUNG_DANG_KY', {name: username, peerId: id});
+            socket.emit('NGUOI_DUNG_DANG_KY', { name: username, peerId: id });
         });
     });
 
-    
+
 
     $('#div-chat').hide();
 
@@ -41,12 +41,12 @@ $(document).ready(function() {
         $('#div-dang-ky').hide();
 
         arrUserInfo.forEach(user => {
-            const {name, peerId} = user;
+            const { name, peerId } = user;
             $('#ulUser').append(`<li id="${peerId}">${name}</li>`);
         });
 
         socket.on('CO_NGUOI_DUNG_MOI', user => {
-            const {name, peerId} = user;
+            const { name, peerId } = user;
             $('#ulUser').append(`<li id="${peerId}">${name}</li>`);
         });
 
@@ -73,13 +73,13 @@ $(document).ready(function() {
         localStream = stream;
         playStream('localStream', localStream)
     });
-    
+
 
     // Bật/tắt camera
     function toggleCamera() {
         isCameraOn = !isCameraOn;
         localStream.getVideoTracks()[0].enabled = isCameraOn;
-    
+
         // Gửi tín hiệu cho đối phương qua Data Channel
         dataChannel.send(JSON.stringify({ type: 'cameraToggle', isCameraOn: isCameraOn }));
     }
@@ -87,7 +87,7 @@ $(document).ready(function() {
     function toggleMicrophone() {
         isMicOn = !isMicOn;
         localStream.getAudioTracks()[0].enabled = isMicOn;
-    
+
         // Gửi tín hiệu cho đối phương qua Data Channel
         dataChannel.send(JSON.stringify({ type: 'microphoneToggle', isMicOn: isMicOn }));
     }
@@ -98,7 +98,7 @@ $(document).ready(function() {
     // Xử lý sự kiện Data Channel
     peer.on('data', data => {
         const message = JSON.parse(data);
-    
+
         if (message.type === 'cameraToggle') {
             const { isCameraOn } = message;
             toggleRemoteCamera(isCameraOn);
@@ -107,25 +107,25 @@ $(document).ready(function() {
             toggleRemoteMicrophone(isMicOn);
         }
     });
-    
+
 
     //quiz
     const optionMenu = document.querySelector(".quiz-menu"),
-       selectBtn = optionMenu.querySelector(".select-btn"),
-       options = optionMenu.querySelectorAll(".option"),
-       sBtn_text = optionMenu.querySelector(".sBtn-text");
+        selectBtn = optionMenu.querySelector(".select-btn"),
+        options = optionMenu.querySelectorAll(".option"),
+        sBtn_text = optionMenu.querySelector(".sBtn-text");
 
-    selectBtn.addEventListener("click", () => optionMenu.classList.toggle("active"));       
+    selectBtn.addEventListener("click", () => optionMenu.classList.toggle("active"));
 
-    options.forEach(option =>{
-    option.addEventListener("click", ()=>{
-        let selectedOption = option.querySelector(".option-text").innerText;
-        sBtn_text.innerText = selectedOption;
+    options.forEach(option => {
+        option.addEventListener("click", () => {
+            let selectedOption = option.querySelector(".option-text").innerText;
+            sBtn_text.innerText = selectedOption;
 
-        optionMenu.classList.remove("active");
+            optionMenu.classList.remove("active");
         });
     });
-    
+
 
     // Caller: người gọi
     $("#btnCall").click(() => {
@@ -151,16 +151,16 @@ $(document).ready(function() {
     //     console.log('Connected to the server');
     // });
 
-   $('#ulUser').on('click', 'li', function() {
+    $('#ulUser').on('click', 'li', function () {
         const id = $(this).attr('id');
 
         openStream()
-        .then(stream => {
-            playStream('localStream', stream);
-            const call = peer.call(id, stream);
-            call.on('stream', remoteStream => playStream('remoteStream', remoteStream));
-        });
-   });
+            .then(stream => {
+                playStream('localStream', stream);
+                const call = peer.call(id, stream);
+                call.on('stream', remoteStream => playStream('remoteStream', remoteStream));
+            });
+    });
 
 });
 
