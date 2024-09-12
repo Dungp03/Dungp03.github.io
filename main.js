@@ -1,12 +1,17 @@
+console.log('Starting application...');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const { ExpressPeerServer } = require('peer');
 require('dotenv').config();
 
+console.log('Modules loaded');
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+
+console.log('Express and Socket.IO initialized');
 
 // Cấu hình PeerServer
 const peerServer = ExpressPeerServer(server, {
@@ -16,8 +21,12 @@ const peerServer = ExpressPeerServer(server, {
 
 app.use('/peerjs', peerServer);
 
+console.log('PeerServer configured');
+
 // Serve static files
 app.use(express.static('public'));
+
+console.log('Static files configured');
 
 // Socket.IO logic
 io.on('connection', (socket) => {
@@ -35,13 +44,18 @@ io.on('connection', (socket) => {
   });
 });
 
+console.log('Socket.IO logic set up');
+
 // Start server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+console.log('Server listen called');
+
 // Existing client-side code
+console.log('Client-side code starts here');
 /////////////////////   Client
 let localStream;
 let remoteStream;
