@@ -1,3 +1,47 @@
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+const { ExpressPeerServer } = require('peer');
+require('dotenv').config();
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+
+// Cấu hình PeerServer
+const peerServer = ExpressPeerServer(server, {
+  debug: true,
+  path: '/peerserver'
+});
+
+app.use('/peerjs', peerServer);
+
+// Serve static files
+app.use(express.static('public'));
+
+// Socket.IO logic
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  socket.on('NGUOI_DUNG_DANG_KY', (data) => {
+    console.log('User registered:', data);
+    io.emit('DANH_SACH_ONLINE', [data]);
+    socket.broadcast.emit('CO_NGUOI_DUNG_MOI', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+    io.emit('USER_DISCONNECTED', socket.id);
+  });
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+// Existing client-side code
 /////////////////////   Client
 let localStream;
 let remoteStream;
@@ -31,8 +75,6 @@ $(document).ready(function () {
             socket.emit('NGUOI_DUNG_DANG_KY', { name: username, peerId: id });
         });
     });
-
-
 
     $('#div-chat').hide();
 
