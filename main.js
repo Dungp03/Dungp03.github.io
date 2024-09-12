@@ -4,7 +4,7 @@ let remoteStream;
 // var peer = null;
 let isCameraOn = true;
 let isMicOn = true;
-const socket = io('https://wrtc-demo-72673597876c.herokuapp.com');
+const socket = io(process.env.SERVER_URL);
 
 // Đảm bảo rằng đoạn mã javacript đã được thực thi khi DOM đc hoành thành
 $(document).ready(function() {
@@ -12,10 +12,10 @@ $(document).ready(function() {
 
     try {
         peer = new Peer(peerjs, {
-            secure: true,
-            host: "wrtc-demo-72673597876c.herokuapp.com",
-            port: 443,
-            // path: "/peerserver",
+            secure: process.env.PEERJS_SECURE === 'true',
+            host: process.env.PEERJS_HOST,
+            port: parseInt(process.env.PEERJS_PORT),
+            path: process.env.PEERJS_PATH,
         });
     } catch (error) {
         console.error('Error initializing Peer:', error);
