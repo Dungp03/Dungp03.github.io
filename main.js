@@ -4,7 +4,7 @@ let remoteStream;
 // var peer = null;
 let isCameraOn = true;
 let isMicOn = true;
-const socket = io('https://dungp03-github-io.vercel.app/');
+const socket = io('https://wrtc-demo-72673597876c.herokuapp.com');
 
 // Đảm bảo rằng đoạn mã javacript đã được thực thi khi DOM đc hoành thành
 $(document).ready(function () {
@@ -13,7 +13,7 @@ $(document).ready(function () {
     try {
         peer = new Peer(peerjs, {
             secure: true,
-            host: "https://dungp03-github-io.vercel.app/",
+            host: "wrtc-demo-72673597876c.herokuapp.com",
             port: 443,
             // path: "/peerserver",
         });
